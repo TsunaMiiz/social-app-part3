@@ -1,6 +1,7 @@
 import firebase from "firebase";
 
-class Fire{
+class Fire {
+
     uploadPhotoAsync = (uri, filename)=> {
         // const path = `photos/${this.uid}/${Date.now()}.jpg`;
          return new Promise(async (res, rej) => {
@@ -44,7 +45,7 @@ class Fire{
         }
     };
 
-    signOutUser = () =>{
+    signOutUser = () => {
         firebase.auth().signOut();
     };
 
@@ -59,20 +60,33 @@ class Fire{
     get timestamp() {
         return Date.now();
     };
+    
+    addPost = async ({ text, localUri }) => {
+        //const remoteUri = await this.uploadPhotoAsync(localUri);
+        const remoteUri = await this.uploadPhotoAsync(localUri, `photos/${this.uid}/${Date.now()}`);
 
-    handlePickAvatar = async () => {
-        UserPermissions.getCameraPermission();
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3]
+        return new Promise((res, rej) => {
+            this.firestore
+                .collection("posts")
+                .add({
+                    text,
+                    uid: this.uid,
+                    timestamp: this.timestamp,
+                    image: remoteUri
+                })
+                .then(ref => {
+                    res(ref);
+                })
+                .catch(error => {
+                    rej(error);
+                });
         });
-
-        if (!result.cancelled) {
-            this.setState({ user: { ...this.state.user, avatar: result.uri } });
-        }
     };
+
+
+
 }
+
 
 Fire.shared = new Fire();
 export default Fire;

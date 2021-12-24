@@ -51,8 +51,8 @@ export default class RegisterScreen extends Component {
             <Text style={styles.error}>{this.state.errorMessage}</Text>
           )}
         </View>
-        <TouchableOpacity onPress={this.handlePickAvatar} styles={{alignItems="center"}}>
-          <Image source={{ uri: this.state.user.avatar }} styles={styles.avatar} />
+        <TouchableOpacity style={{ alignItems: "center" }} onPress={this.handlePickAvatar} >
+          <Image source={{ uri: this.state.user.avatar }} style={styles.avatar} />
           <Ionicons
             name="ios-add"
             size={80}
@@ -95,7 +95,7 @@ export default class RegisterScreen extends Component {
           onPress={() => this.props.navigation.navigate("Login")}
         >
           <Text>
-            Have an account?
+            Already have an account?
             <Text style={{ color: "#FE0000", fontWeight: 600 }}>
               {" "}
               Login{" "}
